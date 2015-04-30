@@ -32,15 +32,28 @@ class Solver {
   // function that restores the state from a SolverState protocol buffer.
   void Restore(const char* resume_file);
   virtual ~Solver() {}
+  inline const SolverParameter& param() const { return param_; }
   inline shared_ptr<Net<Dtype> > net() { return net_; }
   inline const vector<shared_ptr<Net<Dtype> > >& test_nets() {
     return test_nets_;
   }
   int iter() { return iter_; }
 
+  // Invoked before and after an iteration
+  class Callback {
+   public:
+    virtual void before_iteration() = 0;
+    virtual void finish_iteration() = 0;
+  };
+  Callback* callback() const { return callback_; }
+  void set_callback(Callback* value) {
+    CHECK(!callback_ && value);
+    callback_ = value;
+  }
+
  protected:
   // Get the update value for the current iteration.
-  virtual void ComputeUpdateValue() = 0;
+  virtual void ComputeUpdateValue() {}
   // The Solver::Snapshot function implements the basic snapshotting utility
   // that stores the learned net. You should implement the SnapshotSolverState()
   // function that produces a SolverState protocol buffer that needs to be
@@ -49,8 +62,12 @@ class Solver {
   // The test routine
   void TestAll();
   void Test(const int test_net_id = 0);
-  virtual void SnapshotSolverState(SolverState* state) = 0;
-  virtual void RestoreSolverState(const SolverState& state) = 0;
+  virtual void SnapshotSolverState(SolverState* state) {
+    CHECK(false) << "Should be overriden";
+  }
+  virtual void RestoreSolverState(const SolverState& state) {
+    CHECK(false) << "Should be overriden";
+  }
   void DisplayOutputBlobs(const int net_id);
 
   SolverParameter param_;
@@ -58,6 +75,7 @@ class Solver {
   int current_step_;
   shared_ptr<Net<Dtype> > net_;
   vector<shared_ptr<Net<Dtype> > > test_nets_;
+  Callback* callback_;
 
   DISABLE_COPY_AND_ASSIGN(Solver);
 };
