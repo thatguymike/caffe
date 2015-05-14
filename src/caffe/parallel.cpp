@@ -196,7 +196,7 @@ P2PSync<Dtype>::P2PSync(shared_ptr<Solver<Dtype> > root_solver,
       queue_(),
       initial_iter_(root_solver->iter()),
       solver_(),
-      bar_(bar){
+      bar_(bar) {
 #ifndef CPU_ONLY
   int initial_device;
   CUDA_CHECK(cudaGetDevice(&initial_device));
@@ -340,10 +340,10 @@ void P2PSync<Dtype>::finish_iteration() {
   CUDA_CHECK(cudaGetDevice(&device));
   CHECK(device == solver_->param().device_id());
 #endif
-  
-  //Make sure previous operations have completed
+
+  // Make sure previous operations have completed
   bar_->wait();
-  
+
   // Wait for update from parent
   if (parent_) {
     P2PSync<Dtype> *parent = queue_.pop();
