@@ -87,7 +87,8 @@ class P2PSync : public GPUParams<Dtype>, public Solver<Dtype>::Callback,
     public InternalThread {
  public:
   explicit P2PSync(shared_ptr<Solver<Dtype> > root_solver,
-                   P2PSync<Dtype>* parent, const SolverParameter& param, boost::barrier* bar);
+                   P2PSync<Dtype>* parent, const SolverParameter& param,
+                   boost::barrier* bar);
   virtual ~P2PSync();
 
   inline const shared_ptr<Solver<Dtype> >& solver() const {
