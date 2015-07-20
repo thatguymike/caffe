@@ -120,9 +120,9 @@ void DevicePair::compute(const vector<int> devices, vector<DevicePair>* pairs) {
   vector<int> remaining(devices);
 
   // Depth for reduction tree
-  int remaining_depth = (int)ceil(log2(remaining.size()));
+  int remaining_depth = static_cast<int>(ceil(log2(remaining.size())));
 
-  // Group GPUs by board 
+  // Group GPUs by board
   for (int d = 0; d < remaining_depth; ++d) {
     for (int i = 0; i < remaining.size(); ++i) {
       for (int j = i + 1; j < remaining.size(); ++j) {
@@ -174,8 +174,8 @@ void DevicePair::compute(const vector<int> devices, vector<DevicePair>* pairs) {
 
   // Group remaining
   remaining_depth = ceil(log2(remaining.size()));
-  for (int d = 0; d < remaining_depth; ++d) { 
-    for (int i = 0; i < remaining.size(); ++i) {
+  for (int d = 0; d < remaining_depth; ++d) {
+      for (int i = 0; i < remaining.size(); ++i) {
           pairs->push_back(DevicePair(remaining[i], remaining[i+1]));
           DLOG(INFO) << "Remaining pair: " << remaining[i]
                      << ":" << remaining[i+1];
@@ -185,7 +185,7 @@ void DevicePair::compute(const vector<int> devices, vector<DevicePair>* pairs) {
 
   // Should only be the parent node remaining
   CHECK_EQ(remaining.size(), 1);
-  
+
   pairs->insert(pairs->begin(), DevicePair(-1, remaining[0]));
 
   CHECK(pairs->size() == devices.size());
