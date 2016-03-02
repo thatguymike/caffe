@@ -23,7 +23,7 @@
 
 #define GRID_DIM 8
 
-#define PER_LEVEL_REDUCTION
+//#define PER_LEVEL_REDUCTION
 #define MULTIPLE_COMM_STREAMS
 
 namespace caffe {

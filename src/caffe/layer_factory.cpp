@@ -78,7 +78,8 @@ shared_ptr<Layer<Dtype> > GetPoolingLayer(const LayerParameter& param) {
 #ifdef USE_CUDNN
   } else if (engine == PoolingParameter_Engine_CUDNN) {
     PoolingParameter p_param = param.pooling_param();
-    return shared_ptr<Layer<Dtype> >(new CuDNNPoolingLayer<Dtype>(param));
+    return shared_ptr<Layer<Dtype> >(new PoolingLayer<Dtype>(param));
+    //return shared_ptr<Layer<Dtype> >(new CuDNNPoolingLayer<Dtype>(param));
 #endif
   } else {
     LOG(FATAL) << "Layer " << param.name() << " has unknown engine.";
